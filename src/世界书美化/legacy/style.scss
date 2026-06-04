@@ -1,0 +1,53 @@
+// ID selector wins specificity war against SillyTavern's global font rules
+#topo-wb-app {
+  &,
+  & *,
+  & *::before,
+  & *::after {
+    font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace !important;
+    box-sizing: border-box;
+  }
+}
+
+.topo-wb {
+  --topo-bg: #0a0a0a;
+  --topo-surface: #141414;
+  --topo-surface-hover: #1c1c1c;
+  --topo-border: #262626;
+  --topo-text: #e5e5e5;
+  --topo-text-secondary: #737373;
+  --topo-text-muted: #404040;
+
+  --topo-st-system: #8a8a94;
+  --topo-st-user: #94908a;
+  --topo-st-assistant: #8a9490;
+  --topo-st-char: #948a94;
+  --topo-st-example: #908a8a;
+  --topo-st-author: #8a9494;
+  --topo-st-constant: #a0a0a0;
+  --topo-st-default: #737373;
+
+  --topo-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --topo-duration: 300ms;
+
+  --topo-disk-w: 48px;
+  --topo-disk-h: 220px;
+  --topo-disk-gap: 3px;
+  --topo-pad: 16px;
+  --topo-root-size: 18px;
+  --topo-hover-lift: -28px;
+
+  background: var(--topo-bg);
+  color: var(--topo-text);
+  position: relative;
+  padding: var(--topo-pad);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 999px) {
+    --topo-disk-w: 40px;
+    --topo-disk-h: 160px;
+    --topo-pad: 10px;
+    --topo-hover-lift: -20px;
+  }
+}

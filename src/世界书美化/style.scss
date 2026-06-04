@@ -1,0 +1,389 @@
+// Phase 3: keep Tavern's worldbook DOM alive for data/render hooks, but let FUI own the workspace.
+#world_popup > :not(#topo-wb-shell) {
+  display: none !important;
+}
+
+// Persistent hide while our script is active (removed by teleportStyle destroy on pagehide)
+#world_popup_entries_list {
+  display: none !important;
+}
+
+// Expand drawer to fill viewport, flex column for child sizing
+#WorldInfo.openDrawer {
+  width: calc(100vw - 40px) !important;
+  bottom: 2px !important;
+  max-height: calc(100vh - 40px) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+#wi-holder {
+  flex: 1 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+#world_popup {
+  flex: 1 !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: visible !important;
+}
+
+#topo-wb-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  z-index: 1;
+  contain: style;
+
+  &,
+  & *,
+  & *::before,
+  & *::after {
+    font-family: var(--wb-font, 'Cascadia Code', 'JetBrains Mono', 'Consolas', 'Courier New', monospace);
+    box-sizing: border-box;
+  }
+
+  --wb-font: 'Cascadia Code', 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+  --wb-bg: #09090b;
+  --wb-text: #e0e0e0;
+  --wb-text-muted: #737373;
+  --wb-border: #262626;
+  --wb-surface: rgba(255, 255, 255, 0.04);
+  --wb-surface-hover: rgba(255, 255, 255, 0.05);
+
+  --wb-color-a: #ff8c00;
+  --wb-color-b: #d4d4d4;
+  --wb-color-c: #4caf50;
+  --wb-sys: var(--wb-color-a);
+  --wb-char: var(--wb-color-b);
+  --wb-user: var(--wb-color-c);
+
+  --wb-disk-bg: var(--wb-bg);
+  --wb-disk-border: rgba(255, 255, 255, 0.04);
+  --wb-disk-bg-hover: rgba(255, 255, 255, 0.05);
+  --wb-disk-border-hover: rgba(255, 255, 255, 0.2);
+  --wb-disk-bg-active: #000;
+  --wb-disk-border-active: var(--strategy-color);
+  --wb-disk-text-hover: rgba(255, 255, 255, 0.6);
+  --wb-disk-text-active: var(--strategy-color);
+  --wb-port-bg: rgba(255, 255, 255, 0.15);
+  --wb-port-bg-hover: var(--strategy-color);
+  --wb-port-bg-active: var(--strategy-color);
+
+  --wb-disk-w: 33px;
+  --wb-disk-h: 400px;
+  --wb-disk-radius: 0px;
+  --wb-gap: 4px;
+  --wb-wave-amp: 8px;
+  --wb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --wb-duration: 0.4s;
+
+  --wb-scan-speed: 3.6s;
+  --wb-scan-opacity: 0.4;
+  --wb-scan-x: 12px;
+  --wb-scan-y: 1%;
+  --wb-scan-w: 4px;
+  --wb-scan-h: 12%;
+
+  --wb-spine-pad-top: 72px;
+  --wb-spine-pad-left: 16px;
+  --wb-spine-offset: 0px;
+  --wb-root-pad-top: 18px;
+  --wb-root-pad-bottom: 20px;
+  --wb-route-bend: 0.3;
+  --wb-route-root-x: 0px;
+  --wb-route-root-y: 0px;
+  --wb-slot-x: 0px;
+  --wb-slot-y: -16px;
+
+  color: var(--wb-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes wb-scanPulse {
+  0% {
+    opacity: calc(var(--wb-scan-opacity) * 0.15);
+  }
+  25% {
+    opacity: calc(var(--wb-scan-opacity) * 0.4);
+  }
+  50% {
+    opacity: var(--wb-scan-opacity);
+  }
+  75% {
+    opacity: calc(var(--wb-scan-opacity) * 0.4);
+  }
+  100% {
+    opacity: calc(var(--wb-scan-opacity) * 0.15);
+  }
+}
+
+#topo-wb-shell.wb-title-hud_phosphor {
+  --wb-disk-font-size: 14px;
+  --wb-disk-font-weight: normal;
+  --wb-disk-text-color: var(--strategy-color);
+  --wb-disk-letter-spacing: 2px;
+  --wb-disk-text-orientation: mixed;
+  --wb-disk-text-opacity: 0.55;
+  --wb-disk-text-shadow: 0 0 3px var(--strategy-color);
+  --wb-disk-text-hover-opacity: 1;
+  --wb-disk-text-hover-color: var(--strategy-color);
+  --wb-disk-text-hover-shadow: 0 0 8px var(--strategy-color);
+
+  .wb-root__label,
+  .wb-shell-bar__mark,
+  .wb-disk__label {
+    text-shadow: 0 0 8px color-mix(in srgb, var(--strategy-color, var(--wb-user)) 42%, transparent);
+  }
+}
+
+#topo-wb-shell.wb-title-neon_trace {
+  --wb-disk-font-size: 12px;
+  --wb-disk-font-weight: 700;
+  --wb-disk-text-color: transparent;
+  --wb-disk-letter-spacing: 2px;
+  --wb-disk-text-orientation: mixed;
+  --wb-disk-text-opacity: 0.72;
+  --wb-disk-text-shadow:
+    1px 0 0 var(--strategy-color),
+    -1px 0 0 var(--wb-color-c);
+  --wb-disk-text-hover-opacity: 1;
+  --wb-disk-text-hover-color: var(--strategy-color);
+  --wb-disk-text-hover-shadow: 0 0 4px var(--strategy-color);
+
+  .wb-root__label,
+  .wb-shell-bar__mark {
+    color: var(--wb-user);
+    text-shadow:
+      1px 0 0 var(--wb-sys),
+      -1px 0 0 var(--wb-char);
+  }
+
+  .wb-disk__label {
+    text-shadow:
+      1px 0 0 var(--strategy-color),
+      -1px 0 0 var(--wb-bg);
+  }
+}
+
+#topo-wb-shell.wb-title-index_code .wb-disk::after {
+  content: attr(data-node-index);
+  position: absolute;
+  top: 12px;
+  color: var(--strategy-color);
+  font-size: 8px;
+  letter-spacing: 1px;
+  opacity: 0.72;
+  writing-mode: horizontal-tb;
+}
+
+#topo-wb-shell.wb-title-gradient_burn .wb-disk__label {
+  --wb-disk-font-size: 12px;
+  --wb-disk-font-weight: 600;
+  --wb-disk-text-color: var(--wb-text);
+  --wb-disk-letter-spacing: 2px;
+  --wb-disk-text-orientation: mixed;
+  --wb-disk-text-opacity: 0.7;
+  --wb-disk-text-hover-opacity: 1;
+  color: var(--wb-text);
+  opacity: 0.7;
+  font-weight: 600;
+}
+
+#topo-wb-shell.wb-title-gradient_burn .wb-disk:hover .wb-disk__label {
+  color: var(--strategy-color);
+  opacity: 1;
+  background: linear-gradient(180deg, var(--strategy-color), var(--wb-text));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+#topo-wb-shell.wb-title-split_cell .wb-disk__label {
+  --wb-disk-font-size: 12px;
+  --wb-disk-font-weight: normal;
+  --wb-disk-text-color: var(--wb-text);
+  --wb-disk-letter-spacing: 4px;
+  --wb-disk-text-orientation: upright;
+  --wb-disk-text-opacity: 0.7;
+  --wb-disk-text-hover-opacity: 1;
+  --wb-disk-text-hover-color: var(--strategy-color);
+  color: var(--wb-text);
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-orientation: upright;
+  opacity: 0.7;
+}
+
+#topo-wb-shell.wb-title-split_cell .wb-disk:hover .wb-disk__label {
+  color: var(--strategy-color);
+  opacity: 1;
+}
+
+#topo-wb-shell.wb-title-backlit_strip .wb-disk__label {
+  --wb-disk-font-size: 11px;
+  --wb-disk-font-weight: 600;
+  --wb-disk-text-color: var(--wb-text);
+  --wb-disk-letter-spacing: 2px;
+  --wb-disk-text-orientation: mixed;
+  --wb-disk-text-opacity: 0.65;
+  --wb-disk-text-hover-opacity: 1;
+  --wb-disk-text-hover-color: var(--strategy-color);
+  color: var(--wb-text);
+  opacity: 0.65;
+  padding: 4px 2px;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--strategy-color) 22%, transparent), transparent);
+}
+
+#topo-wb-shell.wb-title-backlit_strip .wb-disk:hover .wb-disk__label {
+  opacity: 1;
+  color: var(--strategy-color);
+}
+
+#topo-wb-shell.wb-fx-jitter .wb-disk {
+  animation: wb-fxJitter 2s infinite steps(2, end);
+}
+
+#topo-wb-shell.wb-fx-jitter .wb-disk:nth-child(even) {
+  animation-duration: 3.1s;
+  animation-delay: -1s;
+}
+
+#topo-wb-shell.wb-fx-jitter .wb-disk:nth-child(3n) {
+  animation-duration: 1.7s;
+  animation-delay: -0.5s;
+}
+
+#topo-wb-shell.wb-fx-corrupt .wb-disk--disabled {
+  opacity: 0.9;
+  filter: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 0, 0, 0.07),
+      rgba(255, 0, 0, 0.07) 2px,
+      transparent 2px,
+      transparent 4px
+    ),
+    var(--wb-disk-bg);
+  border-color: rgba(255, 0, 0, 0.35);
+}
+
+#topo-wb-shell.wb-fx-corrupt .wb-disk--disabled .wb-disk__label {
+  color: rgba(255, 64, 64, 0.72);
+  text-shadow:
+    2px 0 0 rgba(255, 0, 0, 0.8),
+    -2px 0 0 rgba(0, 255, 255, 0.38);
+}
+
+#topo-wb-shell.wb-fx-corrupt .wb-disk--disabled .wb-disk__scan i {
+  background: #ff3333;
+}
+
+#topo-wb-shell.wb-fx-corrupt .wb-disk--disabled::after {
+  content: 'ERR_0x99';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 11;
+  padding: 2px 4px;
+  border: 1px solid #ff3333;
+  background: #000;
+  color: #ff3333;
+  font-size: 10px;
+  letter-spacing: 1px;
+  transform: translate(-50%, -50%) rotate(90deg);
+  animation: wb-corruptFlash 2.5s infinite;
+}
+
+#topo-wb-shell.wb-fx-address .wb-disk::before {
+  box-shadow: 0 -8px 0 -7px var(--strategy-color);
+}
+
+#topo-wb-shell.wb-fx-address .wb-disk:hover .wb-disk__address {
+  display: block;
+  animation: wb-addressHudBoot 0.18s steps(2, end) both;
+}
+
+#topo-wb-shell.wb-fx-address .wb-disk:hover .wb-disk__address::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--strategy-color) 28%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transform: translateX(-110%);
+  animation: wb-addressSweep 0.72s ease both;
+}
+
+@keyframes wb-fxJitter {
+  0%,
+  100% {
+    --wb-jitter-offset: 0px;
+  }
+  25% {
+    --wb-jitter-offset: -1px;
+  }
+  50% {
+    --wb-jitter-offset: 1px;
+  }
+  75% {
+    --wb-jitter-offset: 0px;
+  }
+}
+
+@keyframes wb-corruptFlash {
+  0%,
+  92% {
+    opacity: 1;
+  }
+  93%,
+  97% {
+    opacity: 0;
+  }
+}
+
+@keyframes wb-addressHudBoot {
+  0% {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 0;
+  }
+  12% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes wb-addressSweep {
+  0%,
+  18% {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+  30% {
+    opacity: 0.75;
+  }
+  56%,
+  100% {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+}
