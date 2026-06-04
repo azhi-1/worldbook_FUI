@@ -761,28 +761,44 @@ function onDiskPointerDown(event: PointerEvent, entry: WorldbookEntry) {
   const doc = containerRef.value?.ownerDocument ?? document;
 
   if (isTouchDevice) {
+    const startX = event.clientX;
     const startY = event.clientY;
-    const earlyMoveCheck = (e: PointerEvent) => {
-      const dx = Math.abs(e.clientX - dragState.startX);
+    let lastTouchX = startX;
+    let scrolling = false;
+
+    const touchMove = (e: PointerEvent) => {
+      if (dragState.isDragging) {
+        e.preventDefault();
+        onDragMove(e);
+        return;
+      }
+      const dx = Math.abs(e.clientX - startX);
       const dy = Math.abs(e.clientY - startY);
       if (dx > LONG_PRESS_MOVE_TOLERANCE || dy > LONG_PRESS_MOVE_TOLERANCE) {
         cancelLongPress();
-        doc.removeEventListener('pointermove', earlyMoveCheck);
+        scrolling = true;
       }
+      if (scrolling && spineRef.value) {
+        spineRef.value.scrollLeft -= (e.clientX - lastTouchX);
+      }
+      lastTouchX = e.clientX;
     };
-    doc.addEventListener('pointermove', earlyMoveCheck);
+
+    doc.addEventListener('pointermove', touchMove);
 
     longPressTimer = setTimeout(() => {
-      doc.removeEventListener('pointermove', earlyMoveCheck);
-      enterDragMode(entry);
-      doc.addEventListener('pointermove', onDragMove);
+      if (!scrolling) enterDragMode(entry);
     }, LONG_PRESS_MS);
 
-    doc.addEventListener('pointerup', () => {
+    const touchEnd = () => {
       cancelLongPress();
-      doc.removeEventListener('pointermove', earlyMoveCheck);
+      doc.removeEventListener('pointermove', touchMove);
+      doc.removeEventListener('pointercancel', touchEnd);
       onDragEnd();
-    }, { once: true });
+    };
+
+    doc.addEventListener('pointerup', touchEnd, { once: true });
+    doc.addEventListener('pointercancel', touchEnd, { once: true });
   } else {
     doc.addEventListener('pointermove', onDragMove);
     doc.addEventListener('pointerup', onDragEnd);

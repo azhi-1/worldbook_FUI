@@ -175,7 +175,7 @@ onUnmounted(clearAddressTimer);
     opacity 0.3s;
   will-change: transform;
   user-select: none;
-  touch-action: pan-x;
+  touch-action: none;
   --scan-speed-local: var(--wb-scan-speed);
 }
 

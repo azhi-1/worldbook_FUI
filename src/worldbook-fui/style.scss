@@ -32,11 +32,7 @@
     border-radius: 0 !important;
   }
 
-  // FUI has its own selector; hide tavern's native worldbook controls
-  #wiTopBlock {
-    display: none !important;
-  }
-
+  // FUI has its own title; hide tavern's title bar (pin + h3) but keep #wiTopBlock for global selector
   #WorldInfo > .flex-container {
     display: none !important;
   }
