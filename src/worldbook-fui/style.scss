@@ -31,6 +31,15 @@
     max-height: none !important;
     border-radius: 0 !important;
   }
+
+  // FUI has its own selector; hide tavern's native worldbook controls
+  #wiTopBlock {
+    display: none !important;
+  }
+
+  #WorldInfo > .flex-container {
+    display: none !important;
+  }
 }
 
 #wi-holder {

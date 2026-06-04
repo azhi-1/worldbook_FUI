@@ -1457,11 +1457,15 @@ onUnmounted(() => {
   }
 
   .wb-bridge-bar__button {
-    height: 26px;
-    padding: 0 8px;
-    font-size: 9px;
-    flex: 1;
+    height: 28px;
+    padding: 0 6px;
+    font-size: 8px;
+    letter-spacing: 0.5px;
+    flex: 1 1 auto;
     min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .wb-root-zone {

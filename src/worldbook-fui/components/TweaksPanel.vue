@@ -689,14 +689,22 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .wb-tweaks {
-    width: calc(100vw - 16px);
-    max-height: 70dvh;
-    left: 8px !important;
-    right: 8px !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100vw;
+    max-height: 72dvh;
+    border: none;
+    border-top: 1px solid color-mix(in srgb, var(--wb-text) 14%, transparent);
+    border-radius: 0;
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
   }
 
   .wb-tweaks__body {
-    max-height: min(60dvh, 500px);
+    max-height: 60dvh;
+    padding-bottom: env(safe-area-inset-bottom, 12px);
   }
 
   .wb-tweaks__row {
