@@ -132,6 +132,18 @@
 
   color: var(--wb-text);
   -webkit-font-smoothing: antialiased;
+
+  @media (max-width: 1000px) {
+    --wb-disk-w: 28px;
+    --wb-disk-h: 240px;
+  }
+
+  @media (max-width: 768px) {
+    --wb-disk-w: 26px;
+    --wb-disk-h: 200px;
+    --wb-wave-amp: 4px;
+    --wb-spine-pad-top: 48px;
+  }
 }
 
 @keyframes wb-scanPulse {

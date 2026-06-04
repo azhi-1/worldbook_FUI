@@ -724,9 +724,30 @@ function onHoverEnd() {
 // --- Drag to reorder (threshold intent detection: 5px movement → drag) ---
 
 const DRAG_THRESHOLD = 5;
+const LONG_PRESS_MS = 400;
+const LONG_PRESS_MOVE_TOLERANCE = 8;
+
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+let longPressTimer: ReturnType<typeof setTimeout> | null = null;
 
 function getTrackEl(): HTMLElement | null {
   return (trackRef.value as unknown as { $el?: HTMLElement })?.$el ?? null;
+}
+
+function cancelLongPress() {
+  if (longPressTimer !== null) {
+    clearTimeout(longPressTimer);
+    longPressTimer = null;
+  }
+}
+
+function enterDragMode(entry: WorldbookEntry) {
+  dragState.isDragging = true;
+  activeUid.value = null;
+  hoveredEntry.value = entries.value.find(e => e.uid === entry.uid) ?? null;
+  if (spineRef.value) spineRef.value.style.overflowX = 'hidden';
+  startDragRaf();
+  toastr.info('DRAG_MODE', '世界书美化', { timeOut: 800 });
 }
 
 function onDiskPointerDown(event: PointerEvent, entry: WorldbookEntry) {
@@ -738,8 +759,34 @@ function onDiskPointerDown(event: PointerEvent, entry: WorldbookEntry) {
   dragState.isDragging = false;
 
   const doc = containerRef.value?.ownerDocument ?? document;
-  doc.addEventListener('pointermove', onDragMove);
-  doc.addEventListener('pointerup', onDragEnd);
+
+  if (isTouchDevice) {
+    const startY = event.clientY;
+    const earlyMoveCheck = (e: PointerEvent) => {
+      const dx = Math.abs(e.clientX - dragState.startX);
+      const dy = Math.abs(e.clientY - startY);
+      if (dx > LONG_PRESS_MOVE_TOLERANCE || dy > LONG_PRESS_MOVE_TOLERANCE) {
+        cancelLongPress();
+        doc.removeEventListener('pointermove', earlyMoveCheck);
+      }
+    };
+    doc.addEventListener('pointermove', earlyMoveCheck);
+
+    longPressTimer = setTimeout(() => {
+      doc.removeEventListener('pointermove', earlyMoveCheck);
+      enterDragMode(entry);
+      doc.addEventListener('pointermove', onDragMove);
+    }, LONG_PRESS_MS);
+
+    doc.addEventListener('pointerup', () => {
+      cancelLongPress();
+      doc.removeEventListener('pointermove', earlyMoveCheck);
+      onDragEnd();
+    }, { once: true });
+  } else {
+    doc.addEventListener('pointermove', onDragMove);
+    doc.addEventListener('pointerup', onDragEnd);
+  }
 }
 
 let dragRafId = 0;
@@ -778,6 +825,8 @@ function onDragMove(event: PointerEvent) {
     startDragRaf();
   }
 
+  if (isTouchDevice) event.preventDefault();
+
   const track = getTrackEl();
   if (!track) return;
 
@@ -807,10 +856,12 @@ function onDragMove(event: PointerEvent) {
 }
 
 function onDragEnd() {
+  cancelLongPress();
   stopDragRaf();
   const doc = containerRef.value?.ownerDocument ?? document;
   doc.removeEventListener('pointermove', onDragMove);
-  doc.removeEventListener('pointerup', onDragEnd);
+
+  if (spineRef.value) spineRef.value.style.overflowX = '';
 
   if (dragState.isDragging) {
     const track = getTrackEl();

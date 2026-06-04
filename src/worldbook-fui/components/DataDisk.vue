@@ -175,6 +175,7 @@ onUnmounted(clearAddressTimer);
     opacity 0.3s;
   will-change: transform;
   user-select: none;
+  touch-action: pan-x;
   --scan-speed-local: var(--wb-scan-speed);
 }
 
@@ -349,23 +350,12 @@ onUnmounted(clearAddressTimer);
 }
 
 @media (max-width: 1000px) {
-  .wb-disk {
-    --wb-disk-w: 28px;
-    --wb-disk-h: 240px;
-  }
-
   .wb-disk__label {
     font-size: 9px;
   }
 }
 
 @media (max-width: 768px) {
-  .wb-disk {
-    --wb-disk-w: 26px;
-    --wb-disk-h: 200px;
-    --wb-wave-amp: 4px;
-  }
-
   .wb-disk__label {
     font-size: 8px;
     letter-spacing: 1px;
