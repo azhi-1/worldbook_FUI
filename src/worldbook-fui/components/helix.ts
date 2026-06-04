@@ -1,6 +1,4 @@
-// 本仓库根依赖暂未安装 three；这里复用 DNA_ribbon 原生项目中已验证的本地 three module。
-// @ts-ignore - three.module.js 来自子项目 node_modules，allowJs 会让 webpack 正常打包。
-import * as THREE from '../../../projects/love-meido-moemoekyuu/jsscript/nerv_ach/DNA_ribbon/node_modules/three/build/three.module.js';
+import * as THREE from 'three';
 
 export interface HelixOptions {
   baseColor: string;

@@ -1409,4 +1409,79 @@ onUnmounted(() => {
     padding-right: 30%;
   }
 }
+
+@media (max-width: 768px) {
+  .wb-main {
+    min-height: 0;
+    border: none;
+  }
+
+  .wb-shell-bar {
+    height: 36px;
+    padding: 0 10px;
+  }
+
+  .wb-shell-bar__mark {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .wb-shell-bar__source {
+    max-width: 120px;
+    font-size: 10px;
+  }
+
+  .wb-shell-bar__count {
+    font-size: 9px;
+  }
+
+  .wb-bridge-bar {
+    padding: 6px 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .wb-bridge-bar__select {
+    width: 100%;
+    flex-basis: 100%;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .wb-bridge-bar__search {
+    width: 100%;
+    flex-basis: 100%;
+    height: 28px;
+    font-size: 11px;
+    order: 10;
+  }
+
+  .wb-bridge-bar__button {
+    height: 26px;
+    padding: 0 8px;
+    font-size: 9px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .wb-root-zone {
+    padding: 10px 0 12px;
+  }
+
+  .wb-root__symbol {
+    font-size: 22px;
+  }
+
+  .wb-root__label {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .wb-spine {
+    padding-left: 12px;
+    padding-right: 40%;
+    padding-top: var(--wb-spine-pad-top, 48px);
+    padding-bottom: 20px;
+  }
+}
 </style>

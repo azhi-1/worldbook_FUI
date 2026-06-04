@@ -358,4 +358,24 @@ onUnmounted(clearAddressTimer);
     font-size: 9px;
   }
 }
+
+@media (max-width: 768px) {
+  .wb-disk {
+    --wb-disk-w: 26px;
+    --wb-disk-h: 200px;
+    --wb-wave-amp: 4px;
+  }
+
+  .wb-disk__label {
+    font-size: 8px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .wb-disk__address {
+    font-size: 8px;
+    top: -18px;
+    max-width: 140px;
+  }
+}
 </style>

@@ -804,4 +804,66 @@ onMounted(() => {
     padding: 15px;
   }
 }
+
+@media (max-width: 768px) {
+  .wb-ide__window {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .wb-ide__header {
+    height: 36px;
+    padding: 0 10px;
+    flex-wrap: wrap;
+  }
+
+  .wb-ide__breadcrumb {
+    font-size: 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 50%;
+  }
+
+  .wb-ide__actions {
+    gap: 10px;
+  }
+
+  .wb-ide__delete,
+  .wb-ide__commit,
+  .wb-ide__eject {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  .wb-ide__sidebar {
+    height: 40%;
+    padding: 12px;
+  }
+
+  .wb-ide__zone-title {
+    font-size: 9px;
+  }
+
+  .wb-ide__row {
+    margin-bottom: 8px;
+  }
+
+  .wb-ide__workspace {
+    height: 60%;
+    padding: 10px;
+  }
+
+  .wb-ide__textarea,
+  .wb-ide__highlight {
+    font-size: 11px !important;
+    padding: 10px !important;
+  }
+
+  .wb-ide__line-nums {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+}
 </style>

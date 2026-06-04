@@ -686,4 +686,25 @@ onUnmounted(() => {
     width: min(300px, calc(100vw - 24px));
   }
 }
+
+@media (max-width: 768px) {
+  .wb-tweaks {
+    width: calc(100vw - 16px);
+    max-height: 70dvh;
+    left: 8px !important;
+    right: 8px !important;
+  }
+
+  .wb-tweaks__body {
+    max-height: min(60dvh, 500px);
+  }
+
+  .wb-tweaks__row {
+    grid-template-columns: 80px 1fr 42px;
+  }
+
+  .wb-tweaks__row--wide {
+    grid-template-columns: 80px 1fr;
+  }
+}
 </style>
